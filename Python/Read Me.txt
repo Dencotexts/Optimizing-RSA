@@ -1,0 +1,50 @@
+# RSA Encryption and Decryption Script
+
+## Introduction
+This Python script allows you to perform RSA encryption and decryption using a 100-digit prime and a 512-byte text. The script provides functionalities to:
+1. Generate public and private keys.
+2. Encrypt a given plaintext file.
+3. Decrypt a given encrypted file.
+
+## Prerequisites
+- Python 3.x
+- A command line interface (CLI) such as Command Prompt, Terminal, or PowerShell.
+
+## Files
+- `RSA_encode.py`: The main script file.
+- `plainText.txt`: The plaintext file containing the text to be encrypted.
+- `PublicKey.txt`: The generated public key file.
+- `PrivateKey.txt`: The generated private key file.
+- `encryptedText.txt`: The file containing the encrypted text.
+- `plainTextGen.txt`: The file containing the decrypted text.
+
+## Steps to Use the Script
+
+### 1. Generate Keys
+1. Open your command line interface (Cmd).
+2. Navigate to the directory where `RSA_encode.py` is located.
+3. Run the script:
+   ```sh
+   python RSA_encode.py
+4. When prompted, select the option to generate keys by typing 1 and pressing Enter:
+
+"Please choose the function you want to perform: 1. Generating Keys  2. Encryption  3. Decryption: 1"
+
+5. Input the length of prime numbers to use (100 digits is best) and the length of the public key (100 digits): 
+"Please input the length of prime numbers to use: 100
+Please input the length of public key: 100
+"
+
+6. The script will generate the public and private keys and save them to PublicKey.txt and PrivateKey.txt, respectively. You will see a confirmation message.
+
+7. Ensure that your plaintext file (plainText.txt) is in the same directory as the script.
+8. Run the script again to encrypt and decrypt
+
+Throughputs
+During the encryption and decryption processes, the script will measure and display the encryption and decryption throughputs. These values indicate the efficiency of the encryption and decryption operations.
+
+Expected Output
+PublicKey.txt: Contains the public key.
+PrivateKey.txt: Contains the private key.
+encryptedText.txt: Contains the encrypted text.
+plainTextGen.txt: Contains the decrypted text, which should match the original plaintext.
