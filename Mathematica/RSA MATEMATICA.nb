@@ -1,0 +1,434 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     15178,        424]
+NotebookOptionsPosition[     14880,        411]
+NotebookOutlinePosition[     15222,        426]
+CellTagsIndexPosition[     15179,        423]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Load", " ", "the", " ", "RSA", " ", "package"}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"BeginPackage", "[", "\"\<SKPackages`RSA`\>\"", "]"}], ";"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSAPrime", "::", "usage"}], "=", 
+     "\"\<RSAPrime[digits] returns a prime number suitable for the RSA \
+algorithm with the specified number of digits.\>\""}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"GenerateE", "::", "usage"}], "=", 
+     "\"\<GenerateE[p, q] generates a random encoding exponent e that is \
+coprime to (p-1)(q-1).\>\""}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"GenerateD", "::", "usage"}], "=", 
+     "\"\<GenerateD[e, p, q] returns the multiplicative inverse of e \
+mod((p-1)(q-1)).\>\""}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"StringToList", "::", "usage"}], "=", 
+     "\"\<StringToList[text, n] converts a string into a list of numbers each \
+less than n.\>\""}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ListToString", "::", "usage"}], "=", 
+     "\"\<ListToString[l] converts a list of numbers (produced by \
+StringToList) back into the original string.\>\""}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSAEncodeNumber", "::", "usage"}], "=", 
+     "\"\<RSAEncodeNumber[num, e, n] encrypts the number num using the RSA \
+algorithm with exponent e and modulus n.\>\""}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSADecodeNumber", "::", "usage"}], "=", 
+     "\"\<RSADecodeNumber[num, d, n] decrypts the number num using the RSA \
+algorithm with exponent d and modulus n.\>\""}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSAEncode", "::", "usage"}], "=", 
+     "\"\<RSAEncode[text, e, n] encrypts text by converting it into a list of \
+numbers and using the RSA algorithm with exponent e and modulus n.\>\""}], 
+    ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSADecode", "::", "usage"}], "=", 
+     "\"\<RSADecode[l, d, n] decrypts the list of numbers l using the RSA \
+algorithm with exponent d and modulus n, and converts the result back into \
+the original text.\>\""}], ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"GoodRSAPrimeQ", "[", 
+      RowBox[{"n_Integer", ",", "l_Integer"}], "]"}], ":=", 
+     RowBox[{
+      RowBox[{"PrimeQ", "[", "n", "]"}], "&&", 
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"d", "=", "1"}], ",", 
+          RowBox[{"m", "=", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"n", "-", "1"}], ")"}], "/", "2"}]}]}], "}"}], ",", 
+        RowBox[{
+         RowBox[{"While", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"d", "\[LessEqual]", "l"}], "&&", 
+            RowBox[{"!", 
+             RowBox[{"PrimeQ", "[", 
+              RowBox[{"m", "/", "d"}], "]"}]}]}], ",", 
+           RowBox[{"d", "++"}]}], "]"}], ";", 
+         RowBox[{"d", "\[LessEqual]", "l"}]}]}], "]"}]}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSAPrime", "[", "digits_Integer", "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"l", ",", "cand"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"cand", "=", 
+         RowBox[{"Random", "[", 
+          RowBox[{"Integer", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"10", "^", 
+              RowBox[{"(", 
+               RowBox[{"digits", "-", "1"}], ")"}]}], ",", 
+             RowBox[{
+              RowBox[{"10", "^", "digits"}], "-", "1"}]}], "}"}]}], "]"}]}], 
+        ";", 
+        RowBox[{"l", "=", 
+         RowBox[{"10", "^", 
+          RowBox[{"Floor", "[", 
+           RowBox[{
+            RowBox[{"Log", "[", 
+             RowBox[{"10.", ",", "cand"}], "]"}], "/", "30"}], "]"}]}]}], ";", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"EvenQ", "[", "cand", "]"}], ",", 
+          RowBox[{"cand", "++"}]}], "]"}], ";", 
+        RowBox[{"While", "[", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{"GoodRSAPrimeQ", "[", 
+            RowBox[{"cand", ",", "l"}], "]"}]}], ",", 
+          RowBox[{"cand", "+=", "2"}]}], "]"}], ";", "cand"}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"GenerateE", "[", 
+      RowBox[{"p_Integer", ",", "q_Integer"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"res", ",", 
+         RowBox[{"n", "=", 
+          RowBox[{"p", " ", "q"}]}], ",", 
+         RowBox[{"phi", "=", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"p", "-", "1"}], ")"}], " ", 
+           RowBox[{"(", 
+            RowBox[{"q", "-", "1"}], ")"}]}]}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"res", "=", 
+         RowBox[{"Random", "[", 
+          RowBox[{"Integer", ",", 
+           RowBox[{"{", 
+            RowBox[{"p", ",", "n"}], "}"}]}], "]"}]}], ";", 
+        RowBox[{"While", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"GCD", "[", 
+            RowBox[{"res", ",", "phi"}], "]"}], "\[NotEqual]", "1"}], ",", 
+          RowBox[{"res", "=", 
+           RowBox[{"Random", "[", 
+            RowBox[{"Integer", ",", 
+             RowBox[{"{", 
+              RowBox[{"p", ",", "n"}], "}"}]}], "]"}]}]}], "]"}], ";", 
+        "res"}]}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"GenerateD", "[", 
+      RowBox[{"e_Integer", ",", "p_Integer", ",", "q_Integer"}], "]"}], ":=", 
+     RowBox[{"PowerMod", "[", 
+      RowBox[{"e", ",", 
+       RowBox[{"-", "1"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"p", "-", "1"}], ")"}], " ", 
+        RowBox[{"(", 
+         RowBox[{"q", "-", "1"}], ")"}]}]}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSAEncodeNumber", "[", 
+      RowBox[{"num_Integer", ",", "e_Integer", ",", "n_Integer"}], "]"}], ":=", 
+     RowBox[{
+      RowBox[{"PowerMod", "[", 
+       RowBox[{"num", ",", "e", ",", "n"}], "]"}], "/;", 
+      RowBox[{"num", "<", "n"}]}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSADecodeNumber", "[", 
+      RowBox[{"num_Integer", ",", "d_Integer", ",", "n_Integer"}], "]"}], ":=", 
+     RowBox[{"PowerMod", "[", 
+      RowBox[{"num", ",", "d", ",", "n"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ConvertString", "[", "str_String", "]"}], ":=", 
+     RowBox[{"Fold", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Plus", "[", 
+         RowBox[{
+          RowBox[{"256", " ", "#1"}], ",", "#2"}], "]"}], "&"}], ",", "0", 
+       ",", 
+       RowBox[{"ToCharacterCode", "[", "str", "]"}]}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"StringToList", "[", 
+      RowBox[{"text_String", ",", "n_Integer"}], "]"}], ":=", 
+     RowBox[{
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"blockLength", "=", 
+           RowBox[{"Floor", "[", 
+            RowBox[{"N", "[", 
+             RowBox[{"Log", "[", 
+              RowBox[{"256", ",", "n"}], "]"}], "]"}], "]"}]}], ",", 
+          RowBox[{"strLength", "=", 
+           RowBox[{"StringLength", "[", "text", "]"}]}]}], "}"}], ",", 
+        RowBox[{"ConvertString", "/@", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"StringTake", "[", 
+            RowBox[{"text", ",", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", 
+               RowBox[{"Min", "[", 
+                RowBox[{"strLength", ",", 
+                 RowBox[{"i", "+", "blockLength", "-", "1"}]}], "]"}]}], 
+              "}"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "1", ",", "strLength", ",", "blockLength"}], 
+            "}"}]}], "]"}]}]}], "]"}], "/;", 
+      RowBox[{"n", ">", "256"}]}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"MakeList", "[", "0", "]"}], "=", 
+     RowBox[{"{", "}"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"MakeList", "[", "num_Integer", "]"}], ":=", 
+     RowBox[{"Append", "[", 
+      RowBox[{
+       RowBox[{"MakeList", "[", 
+        RowBox[{"Quotient", "[", 
+         RowBox[{"num", ",", "256"}], "]"}], "]"}], ",", 
+       RowBox[{"Mod", "[", 
+        RowBox[{"num", ",", "256"}], "]"}]}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ConvertNumber", "[", "num_Integer", "]"}], ":=", 
+     RowBox[{"FromCharacterCode", "/@", 
+      RowBox[{"MakeList", "[", "num", "]"}]}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ListToString", "[", "l_List", "]"}], ":=", 
+     RowBox[{"StringJoin", "[", 
+      RowBox[{"ConvertNumber", "/@", "l"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSAEncode", "[", 
+      RowBox[{"text_String", ",", "e_Integer", ",", "n_Integer"}], "]"}], ":=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"RSAEncodeNumber", "[", 
+         RowBox[{"#", ",", "e", ",", "n"}], "]"}], "&"}], "/@", 
+       RowBox[{"StringToList", "[", 
+        RowBox[{"text", ",", "n"}], "]"}]}], "/;", 
+      RowBox[{"n", ">", "256"}]}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RSADecode", "[", 
+      RowBox[{"l_List", ",", "d_Integer", ",", "n_Integer"}], "]"}], ":=", 
+     RowBox[{"ListToString", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"RSADecodeNumber", "[", 
+         RowBox[{"#", ",", "d", ",", "n"}], "]"}], "&"}], "/@", "l"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"End", "[", "]"}], ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"EndPackage", "[", "]"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Test", " ", "the", " ", "encryption", " ", "and", " ", "decryption", " ",
+      "throughput"}], "*)"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Generate", " ", "RSA", " ", "keys"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"digits", "=", "100"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"p", "=", 
+     RowBox[{"SKPackages`RSA`RSAPrime", "[", "digits", "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"q", "=", 
+     RowBox[{"SKPackages`RSA`RSAPrime", "[", "digits", "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"n", "=", 
+     RowBox[{"p", " ", "q"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"e", "=", 
+     RowBox[{"SKPackages`RSA`GenerateE", "[", 
+      RowBox[{"p", ",", "q"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"d", "=", 
+     RowBox[{"SKPackages`RSA`GenerateD", "[", 
+      RowBox[{"e", ",", "p", ",", "q"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Define", " ", "the", " ", "text", " ", "to", " ", "be", " ", "encrypted",
+      " ", "and", " ", "decrypted"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+    "text", "=", 
+     "\"\<Sempre caro mi fu quest'ermo colle che da tanta now i am feeling \
+very very freaked out because i do not know what is happening to my plenty \
+know of code i got from the professor and i am about to fell very useless \
+German poison, ego kill you one second! one second payne one second payne kk \
+now we go speak ga then look.. or we go speak native Italian.. or \
+sicilian\>\""}], ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{"Encrypt", " ", "the", " ", "text"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"encryptTime", "=", 
+     RowBox[{
+      RowBox[{"AbsoluteTiming", "[", 
+       RowBox[{
+        RowBox[{"encrypted", "=", 
+         RowBox[{"SKPackages`RSA`RSAEncode", "[", 
+          RowBox[{"text", ",", "e", ",", "n"}], "]"}]}], ";"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{"Decrypt", " ", "the", " ", "text"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"decryptTime", "=", 
+     RowBox[{
+      RowBox[{"AbsoluteTiming", "[", 
+       RowBox[{
+        RowBox[{"decrypted", "=", 
+         RowBox[{"SKPackages`RSA`RSADecode", "[", 
+          RowBox[{"encrypted", ",", "d", ",", "n"}], "]"}]}], ";"}], "]"}], 
+      "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Verify", " ", "the", " ", "decryption"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"verification", "=", 
+     RowBox[{"text", "===", "decrypted"}]}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Calculate", " ", "the", " ", "size", " ", "of", " ", "the", " ", "text", 
+     " ", "in", " ", "bytes"}], "*)"}], 
+   RowBox[{
+    RowBox[{"textSize", "=", 
+     RowBox[{"StringLength", "[", "text", "]"}]}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Calculate", " ", "encryption", " ", "and", " ", "decryption", " ", 
+     "throughput"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"encryptionThroughput", "=", 
+     RowBox[{"textSize", "/", "encryptTime"}]}], ";", 
+    RowBox[{"(*", 
+     RowBox[{"bytes", " ", "per", " ", "second"}], "*)"}], 
+    RowBox[{"decryptionThroughput", "=", 
+     RowBox[{"textSize", "/", "decryptTime"}]}], ";", 
+    RowBox[{"(*", 
+     RowBox[{"bytes", " ", "per", " ", "second"}], "*)"}], 
+    RowBox[{"(*", 
+     RowBox[{"Print", " ", "the", " ", "results"}], "*)"}], 
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Encryption Time: \>\"", ",", "encryptTime", ",", 
+      "\"\< seconds\>\""}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Decryption Time: \>\"", ",", "decryptTime", ",", 
+      "\"\< seconds\>\""}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Encryption Throughput: \>\"", ",", "encryptionThroughput", ",", 
+      "\"\< bytes per second\>\""}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Decryption Throughput: \>\"", ",", "decryptionThroughput", ",", 
+      "\"\< bytes per second\>\""}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Verification: \>\"", ",", "verification"}], "]"}], 
+    ";"}]}]}]], "Input",ExpressionUUID->"e107e261-d19f-4baf-8849-\
+728e84b80f11"]
+},
+WindowSize->{1136, 741},
+WindowMargins->{{25, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (March 6, 2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 14318, 389, 1492, "Input",ExpressionUUID->"e107e261-d19f-4baf-8849-728e84b80f11"]
+}
+]
+*)
+
+(* End of internal cache information *)
+
