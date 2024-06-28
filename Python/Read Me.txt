@@ -24,8 +24,9 @@ This Python script allows you to perform RSA encryption and decryption using a 1
 1. Open your command line interface (Cmd).
 2. Navigate to the directory where `RSA_encode.py` is located.
 3. Run the script:
-   ```sh
+
    python RSA_encode.py
+
 4. When prompted, select the option to generate keys by typing 1 and pressing Enter:
 
 "Please choose the function you want to perform: 1. Generating Keys  2. Encryption  3. Decryption: 1"
@@ -39,11 +40,18 @@ Please input the length of public key: 100
 
 7. Ensure that your plaintext file (plainText.txt) is in the same directory as the script.
 8. Run the script again to encrypt and decrypt
-
+9. Provided your plainText.txt, PublicKey.txt and PrivateKey.txt is in the same directory, 
+   when you prompted to specify the path to your input text, type:
+      plaintext.txt
+   When asked to specify the path to your PrivateKey, type:
+      privatekey.txt
+   When asked to specify the path to your PublicKey, type:
+      publickey.txt
+--------------------------------------------------------------------------------
 Throughputs
 During the encryption and decryption processes, the script will measure and display the encryption and decryption throughputs. These values indicate the efficiency of the encryption and decryption operations.
-
-Expected Output
+-------------------------------------------------------------------------------
+Expected Output files
 PublicKey.txt: Contains the public key.
 PrivateKey.txt: Contains the private key.
 encryptedText.txt: Contains the encrypted text.
