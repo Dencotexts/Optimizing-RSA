@@ -8,7 +8,7 @@ To run the RSA script using Cython for potential performance improvements and to
 3. Create a Setup File: Create a setup.py file to compile the Cython script. This setup file is used to build the Cython extension.
 
 	Create a file named setup.py with the following content:
-
+-----------------------------------------------------------------------
 # <--Copy-n-paste verbatim in notepad and save as setup.py -->
 from setuptools import setup
 from Cython.Build import cythonize
@@ -17,6 +17,7 @@ setup(
     ext_modules = cythonize("RSA_encode.pyx")
 )
 # <--Code ends here -->
+-----------------------------------------------------------------------
 
 4. Compile the Cython Script: Use the setup script to compile the .pyx file into a C extension. Run the following command in your command line:
 
@@ -25,7 +26,7 @@ setup(
 This will generate a .c file and a compiled shared object (.so or .pyd file, depending on your operating system).
 
 5. Modify Your Script to Import the Compiled Module: If you named your Python script RSA_encode.pyx, it will be compiled to RSA_encode.so (on Unix-like systems) or RSA_encode.pyd (on Windows). You need to modify your main script to import this compiled module. We have to create a new script named run_RSA.py:
-
+-----------------------------------------------------------------------
 # <--Copy-n-paste verbatim in notepad and save as run_RSA.pyy -->
 import time
 import RSA_encode
@@ -101,9 +102,9 @@ if __name__ == "__main__":
         print(f"Unexpected error: {e}")
 
 # <--Code ends here -->
-
+-----------------------------------------------------------------------
 
 6. Run the run_RSA.py script using either Command Prompt or PowerShell:
 	    python run_RSA.py
 
-Follow the prompts to generate keys, encrypt, and decrypt as before. The script will print the throughputs for each operation.
+Follow the prompts (python run_RSA.py) to generate keys, encrypt, and decrypt as before. The script will print the throughputs for each encryption and decryption operation as usual, this time for Cython.
