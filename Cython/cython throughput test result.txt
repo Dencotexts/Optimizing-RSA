@@ -1,0 +1,28 @@
+C:\Users\User\Desktop\RSA\Cython>python run_RSA.py
+Please choose the function you want to perform: 1. Generating Keys  2. Encryption  3. Decryption: 1
+Please input the length of prime numbers to use: 100
+Please input the length of public key: 100
+Done generating private and public keys to files.
+You can share your public key file, but please keep the private key in a safe place
+Key generation throughput: 0.2960045337677002 seconds
+
+C:\Users\User\Desktop\RSA\Cython>python run_RSA.py
+Please choose the function you want to perform: 1. Generating Keys  2. Encryption  3. Decryption: 2
+Please input the path of the plain text you want to encrypt: plaintext.txt
+Please input the path of your private key: privatekey.txt
+Please input the path of partner's public key: publickey.txt
+Encryption Time: 0.03198361396789551 seconds
+Encryption Throughput: 22792.921423193613 bytes/second
+Done encrypting. Encryption has been written to file encryptedText.txt
+Please send the encrypted file to your communication partner
+Encryption completed and encrypted text written to file.
+
+C:\Users\User\Desktop\RSA\Cython>python run_RSA.py
+Please choose the function you want to perform: 1. Generating Keys  2. Encryption  3. Decryption: 3
+Please input the path of the encrypted text you want to decrypt: encryptedtext.txt
+Please input the path of your private key: privatekey.txt
+Please input the path of partner's public key: publickey.txt
+Decryption Time: 0.0340421199798584 seconds
+Decryption Throughput: 21414.647514059798 bytes/second
+Done decrypting. Decrypted file has been written to file plainTextGen.txt
+Decryption completed and decrypted text written to file.
